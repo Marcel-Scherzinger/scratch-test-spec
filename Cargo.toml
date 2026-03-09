@@ -1,0 +1,16 @@
+[package]
+name = "scratch-test-spec"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+schemars = "1.2.1"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+serde_with = "3.17.0"
+
+[dependencies.svalue]
+git = "https://github.com/Marcel-Scherzinger/scratch-test-value"
+package = "scratch-test-value"
+default-features = false
+
