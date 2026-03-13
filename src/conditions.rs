@@ -23,19 +23,18 @@ pub trait ExplainableFailure {
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, From, ToSchema)]
 #[serde(rename_all = "kebab-case", untagged)]
 pub enum Condition<Single> {
-    #[schema(no_recursion)]
-    Compound(CompoundCheckCondition<Single>),
     Single(Single),
+    Compound(CompoundCheckCondition<Single>),
 }
 #[skip_serializing_none]
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case")]
 pub enum CompoundCheckCondition<Single> {
-    #[schema(no_recursion)]
+    #[schema(no_recursion, title = "all")]
     All(Vec<Condition<Single>>),
-    #[schema(no_recursion)]
+    #[schema(no_recursion, title = "any")]
     Any(Vec<Condition<Single>>),
-    #[schema(no_recursion)]
+    #[schema(no_recursion, title = "not")]
     Not(Box<Condition<Single>>),
 }
 
