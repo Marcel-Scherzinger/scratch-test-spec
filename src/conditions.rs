@@ -29,6 +29,7 @@ pub enum Condition<Single> {
 #[skip_serializing_none]
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case")]
+#[schema(no_recursion)]
 pub enum CompoundCheckCondition<Single> {
     All(Vec<Condition<Single>>),
     Any(Vec<Condition<Single>>),
