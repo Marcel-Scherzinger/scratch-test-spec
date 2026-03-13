@@ -22,6 +22,7 @@ pub trait ExplainableFailure {
 #[skip_serializing_none]
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, From, ToSchema)]
 #[serde(rename_all = "kebab-case", untagged)]
+#[schema(no_recursion)]
 pub enum Condition<Single> {
     Compound(CompoundCheckCondition<Single>),
     Single(Single),
