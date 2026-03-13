@@ -8,9 +8,12 @@ use utoipa::ToSchema;
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case", tag = "action")]
 pub enum Transformation {
-    TrimLeftRight,
-    ToUppercase,
-    ExtractSingleNumber,
+    #[schema(title = "trim-left-right")]
+    TrimLeftRight {},
+    #[schema(title = "to-uppercase")]
+    ToUppercase {},
+    #[schema(title = "extract-single-number")]
+    ExtractSingleNumber {},
 }
 
 #[derive(Debug, PartialEq, thiserror::Error)]
@@ -27,9 +30,9 @@ static NUMBER_REGEX: std::sync::LazyLock<regex::Regex> =
 impl Transformation {
     pub(crate) fn transform(&self, value: SValue) -> Result<SValue, TransformationError> {
         Ok(match self {
-            Self::ToUppercase => SValue::Text(value.to_string().to_uppercase().into()),
-            Self::TrimLeftRight => SValue::Text(value.to_string().trim().into()),
-            Self::ExtractSingleNumber => match value {
+            Self::ToUppercase {} => SValue::Text(value.to_string().to_uppercase().into()),
+            Self::TrimLeftRight {} => SValue::Text(value.to_string().trim().into()),
+            Self::ExtractSingleNumber {} => match value {
                 SValue::Int(i) => SValue::Int(i),
                 SValue::Float(f) => SValue::Float(f),
                 SValue::Bool(true) => SValue::Int(1),

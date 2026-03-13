@@ -13,15 +13,15 @@ fn test_ser() {
         StaticTestCategory::new(vec![TestCase::new(vec!["1", "2"]).and_check(
             TestCaseCheck::new_error(CompoundCheckCondition::All(vec![
                         Check::last_line()
-                            .transform(Transformation::ToUppercase)
-                            .transform(Transformation::TrimLeftRight)
-                            .transform(Transformation::ExtractSingleNumber)
+                            .transform(Transformation::ToUppercase {})
+                            .transform(Transformation::TrimLeftRight{})
+                            .transform(Transformation::ExtractSingleNumber{})
                             .criterion(Criterion::EqualNumbers {
                                 other: crate::Number::Int(3),
                                 float_tolerance: Some(1e-9),
                             }),
                         Check::nth_line_from_end(3)
-                            .transform(Transformation::ExtractSingleNumber)
+                            .transform(Transformation::ExtractSingleNumber {})
                             .c_equal_texts("0"),
                     ])),
         )])

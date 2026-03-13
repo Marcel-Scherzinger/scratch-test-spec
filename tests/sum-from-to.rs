@@ -24,7 +24,7 @@ fn test_sum_from_to_only_checks() {
     let spec2 = TestSpecification::new(vec![StaticTestCategory::new(vec![
         TestCase::new(vec!["1", "10"]).and_check(TestCaseCheck::new_error(
             Check::last_line()
-                .transform(Transformation::ExtractSingleNumber)
+                .transform(Transformation::ExtractSingleNumber {})
                 .c_equal_texts("45"),
         )),
     ])]);
