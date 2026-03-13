@@ -4,13 +4,31 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+derive-getters = "0.5.0"
+derive_more = { version = "2.1.1", features = ["from"] }
+itertools = "0.14.0"
+pastey = "0.2.1"
+regex = "1.12.3"
 schemars = "1.2.1"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 serde_with = "3.17.0"
+thiserror = "2.0.18"
 
 [dependencies.svalue]
 git = "https://github.com/Marcel-Scherzinger/scratch-test-value"
 package = "scratch-test-value"
 default-features = false
+
+[dependencies.smodel]
+git = "https://github.com/Marcel-Scherzinger/scratch-test-model"
+package = "scratch-test-model"
+default-features = false
+features = ["sb3"]
+
+[dependencies.sinterpreter]
+git = "https://github.com/Marcel-Scherzinger/scratch-test-interpreter"
+package = "scratch-test-interpreter"
+default-features = false
+features = ["rand"]
 

@@ -1,62 +1,44 @@
 use serde_json::Map;
 
-use crate::{
-    Criterion, RandomsCfg, RandomsGenerate, SingleCheckCondition, StaticTestCategory, TestCase,
-    TestCaseCheck, TestCategory, TestSpecification, Transformation,
+use crate::report::{CategoryReport, CheckReport};
+use crate::spec::{
+    CaseCheckSeverity, Check, CompoundCheckCondition, Criterion, Selector, SingleCheckCondition,
+    StaticTestCategory, TestCase, TestCaseCheck, TestCaseCheckCondition, TestCategory,
+    TestSpecification, Transformation,
 };
+use crate::{RandomsCfg, RandomsGenerate};
 
 #[test]
 fn test_ser() {
-    let spec = TestSpecification {
-        solution: None,
-        categories: vec![TestCategory::Static(StaticTestCategory {
-            description: Some("Both positive".to_string()),
-            randoms: Some(RandomsCfg {
-                generate: RandomsGenerate::Allow { seed: Some(73) },
-            }),
-            cases: vec![TestCase {
-                inputs: vec!["1".to_string(), "2".to_string()],
-                checks: vec![TestCaseCheck {
-                    severity: crate::TestCaseSeverity::Error,
-                    on_success: None,
-                    on_failure: None,
-                    condition: crate::TestCaseCheckCondition::Compound(
-                        crate::CompoundCheckCondition::All(vec![
-                            crate::TestCaseCheckCondition::Single(SingleCheckCondition {
-                                select: crate::Selector::LastLine,
-                                transformations: vec![
-                                    Transformation::ToUppercase,
-                                    Transformation::TrimLeftRight,
-                                    Transformation::ExtractSingleNumber,
-                                ],
-                                criterion: Criterion::EqualNumbers {
-                                    other: 3.into(),
-                                    float_tolerance: Some(1e-9),
-                                },
+    let spec = TestSpecification::new(vec![TestCategory::Static(
+        StaticTestCategory::new(vec![TestCase::new(vec!["1", "2"]).and_check(
+            TestCaseCheck::new_error(CompoundCheckCondition::All(vec![
+                        Check::last_line()
+                            .transform(Transformation::ToUppercase)
+                            .transform(Transformation::TrimLeftRight)
+                            .transform(Transformation::ExtractSingleNumber)
+                            .criterion(Criterion::EqualNumbers {
+                                other: crate::Number::Int(3),
+                                float_tolerance: Some(1e-9),
                             }),
-                            crate::TestCaseCheckCondition::Single(SingleCheckCondition {
-                                select: crate::Selector::NthLineFromEnd {
-                                    n: 3.try_into().unwrap(),
-                                },
-                                transformations: vec![Transformation::ExtractSingleNumber],
-                                criterion: Criterion::EqualTexts {
-                                    other: "0".to_string(),
-                                },
-                            }),
-                        ]),
-                    ),
-                }],
-            }],
-        })],
-        misc: Some(serde_json::Value::Object(Map::from_iter(
-            vec![
-                ("title", "XX – Title"),
-                ("input", "Some description of input"),
-            ]
-            .into_iter()
-            .map(|(x, y)| (x.to_string(), y.to_string().into())),
-        ))),
-    };
+                        Check::nth_line_from_end(3)
+                            .transform(Transformation::ExtractSingleNumber)
+                            .c_equal_texts("0"),
+                    ])),
+        )])
+        .with_description(Some("Both positive"))
+        .with_randoms(Some(RandomsCfg {
+            generate: RandomsGenerate::Allow { seed: Some(73) },
+        })),
+    )])
+    .with_misc(Some(serde_json::Value::Object(Map::from_iter(
+        vec![
+            ("title", "XX – Title"),
+            ("input", "Some description of input"),
+        ]
+        .into_iter()
+        .map(|(x, y)| (x.to_string(), y.to_string().into())),
+    ))));
     let _serialised = (
         "{}",
         serde_json::to_string_pretty(&schemars::schema_for!(TestSpecification).to_value()).unwrap(),
