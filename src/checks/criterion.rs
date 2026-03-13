@@ -3,11 +3,12 @@ use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use sinterpreter::{Report, default_state::DefaultState};
 use svalue::SValue;
+use utoipa::ToSchema;
 
 use crate::{Number, RandomsCfg};
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case", tag = "type")]
 pub enum Criterion {
     EqualTexts {

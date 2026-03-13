@@ -3,6 +3,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use smodel::{ProjectDoc, blocks::BlockKindUnit};
+use utoipa::ToSchema;
 
 use crate::{
     CheckResultMessages,
@@ -12,7 +13,7 @@ use crate::{
 };
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]
 #[serde(rename_all = "kebab-case")]
 pub struct Lint {
     severity: LintSeverity,
@@ -21,7 +22,7 @@ pub struct Lint {
     on_failure: Option<CheckResultMessages>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone, Copy)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone, Copy, ToSchema)]
 #[serde(rename_all = "kebab-case")]
 pub enum LintSeverity {
     /// if this check fails, only an info is shown that a nice-to-have criteria is not fulfilled
@@ -91,7 +92,7 @@ impl Lint {
     }
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case", tag = "type")]
 pub enum LintCondition {
     BlockCountLimit { opcode: BlockKindUnit, max: u16 },

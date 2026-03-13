@@ -1,7 +1,8 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone, Copy)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone, Copy, ToSchema)]
 #[serde(rename_all = "kebab-case")]
 pub enum CaseCheckSeverity {
     /// if this check fails, only an info is shown that a nice-to-have criteria is not fulfilled

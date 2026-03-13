@@ -32,8 +32,9 @@ use derive_getters::Getters;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
+use utoipa::ToSchema;
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone, ToSchema)]
 #[serde(rename_all = "kebab-case", untagged)]
 pub enum Number {
     Int(i64),
@@ -41,7 +42,7 @@ pub enum Number {
 }
 
 #[skip_serializing_none]
-#[derive(Debug, Default, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
+#[derive(Debug, Default, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]
 #[serde(rename_all = "kebab-case")]
 pub struct CheckResultMessages {
     human_msg: Option<String>,
@@ -66,13 +67,13 @@ impl CheckResultMessages {
 }
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]
 pub struct RandomsCfg {
     generate: RandomsGenerate,
 }
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case", tag = "status")]
 pub enum RandomsGenerate {
     /// no program is allowed to request random numbers, doing so will lead to

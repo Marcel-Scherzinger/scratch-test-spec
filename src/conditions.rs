@@ -3,6 +3,7 @@ use itertools::Itertools;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
+use utoipa::ToSchema;
 
 pub trait AnySingleCondition {
     type Error<'s>: ExplainableFailure
@@ -19,14 +20,14 @@ pub trait ExplainableFailure {
 }
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, From)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, From, ToSchema)]
 #[serde(rename_all = "kebab-case", untagged)]
 pub enum Condition<Single> {
     Compound(CompoundCheckCondition<Single>),
     Single(Single),
 }
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case")]
 pub enum CompoundCheckCondition<Single> {
     All(Vec<Condition<Single>>),

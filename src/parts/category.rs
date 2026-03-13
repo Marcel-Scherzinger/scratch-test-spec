@@ -2,10 +2,11 @@ use derive_more::From;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use smodel::ProjectDoc;
+use utoipa::ToSchema;
 
 use crate::parts::{static_category::StaticCategoryReport, static_category::StaticTestCategory};
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, From)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, From, ToSchema)]
 #[serde(rename_all = "kebab-case", tag = "type")]
 pub enum TestCategory {
     Static(StaticTestCategory),

@@ -7,6 +7,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use smodel::ProjectDoc;
+use utoipa::ToSchema;
 
 #[derive(Debug, PartialEq, derive_getters::Getters)]
 pub struct StaticCategoryReport<'s> {
@@ -34,7 +35,7 @@ impl StaticTestCategory {
 }
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]
 pub struct StaticTestCategory {
     /// optional description about kind of contained tests and tested criteria
     description: Option<String>,

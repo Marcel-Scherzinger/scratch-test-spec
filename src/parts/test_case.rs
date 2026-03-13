@@ -8,6 +8,7 @@ use sinterpreter::{
 };
 use smodel::ProjectDoc;
 use svalue::SList;
+use utoipa::ToSchema;
 
 use crate::{
     RandomsCfg,
@@ -15,7 +16,7 @@ use crate::{
 };
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]
 pub struct TestCase {
     inputs: Vec<String>,
     // randoms: Option<RandomsCfg>,

@@ -3,6 +3,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use smodel::ProjectDoc;
+use utoipa::ToSchema;
 
 use crate::{
     lints::{Lint, LintReport},
@@ -10,7 +11,7 @@ use crate::{
 };
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]
 pub struct TestSpecification {
     lints: Vec<Lint>,
     /// list of test categories

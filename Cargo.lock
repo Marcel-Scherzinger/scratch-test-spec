@@ -688,7 +688,7 @@ dependencies = [
 [[package]]
 name = "scratch-test-model"
 version = "0.1.0"
-source = "git+https://github.com/Marcel-Scherzinger/scratch-test-model#f7db45cda48c64cb1f80f1b89618fe011b886caa"
+source = "git+https://github.com/Marcel-Scherzinger/scratch-test-model#9d506c08900472d0cf0d093c06314a58dbf78aef"
 dependencies = [
  "const-str",
  "derive-getters",
@@ -703,13 +703,14 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror",
+ "utoipa",
  "zip",
 ]
 
 [[package]]
 name = "scratch-test-model-proc"
 version = "0.1.0"
-source = "git+https://github.com/Marcel-Scherzinger/scratch-test-model#f7db45cda48c64cb1f80f1b89618fe011b886caa"
+source = "git+https://github.com/Marcel-Scherzinger/scratch-test-model#9d506c08900472d0cf0d093c06314a58dbf78aef"
 dependencies = [
  "convert_case 0.11.0",
  "proc-macro2",
@@ -734,6 +735,7 @@ dependencies = [
  "serde_json",
  "serde_with",
  "thiserror",
+ "utoipa",
 ]
 
 [[package]]
@@ -947,6 +949,29 @@ name = "unicode-xid"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebc1c04c71510c7f702b52b7c350734c9ff1295c464a03335b00bb84fc54f853"
+
+[[package]]
+name = "utoipa"
+version = "5.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2fcc29c80c21c31608227e0912b2d7fddba57ad76b606890627ba8ee7964e993"
+dependencies = [
+ "indexmap 2.13.0",
+ "serde",
+ "serde_json",
+ "utoipa-gen",
+]
+
+[[package]]
+name = "utoipa-gen"
+version = "5.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d79d08d92ab8af4c5e8a6da20c47ae3f61a0f1dabc1997cdf2d082b757ca08b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "version_check"

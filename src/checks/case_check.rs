@@ -3,6 +3,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use sinterpreter::{Report, default_state::DefaultState};
+use utoipa::ToSchema;
 
 use super::CaseCheckSeverity;
 
@@ -19,7 +20,7 @@ pub struct CheckReport<'s> {
 }
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]
 #[serde(rename_all = "kebab-case")]
 pub struct TestCaseCheck {
     severity: CaseCheckSeverity,

@@ -14,6 +14,7 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 serde_with = "3.17.0"
 thiserror = "2.0.18"
+utoipa = "5.4.0"
 
 [dependencies.svalue]
 git = "https://github.com/Marcel-Scherzinger/scratch-test-value"
@@ -24,7 +25,7 @@ default-features = false
 git = "https://github.com/Marcel-Scherzinger/scratch-test-model"
 package = "scratch-test-model"
 default-features = false
-features = ["sb3", "serde", "schemars"]
+features = ["sb3", "serde", "schemars", "utoipa"]
 
 [dependencies.sinterpreter]
 git = "https://github.com/Marcel-Scherzinger/scratch-test-interpreter"
