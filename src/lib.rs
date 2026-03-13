@@ -1,14 +1,13 @@
-#![allow(unused)]
 mod checks;
+mod conditions;
 mod helper;
 mod parts;
 
 pub(crate) use helper::impl_modifiers;
 
 pub mod error {
-    pub use crate::checks::{
-        condition::ConditionError, criterion::CriterionError, transformation::TransformationError,
-    };
+    pub use crate::checks::{criterion::CriterionError, transformation::TransformationError};
+    pub use crate::conditions::ConditionError;
     pub use crate::parts::specification::SpecError;
 }
 pub mod report {
@@ -17,17 +16,15 @@ pub mod report {
 }
 pub mod spec {
     pub use crate::checks::{
-        CaseCheckSeverity, Check, CompoundCheckCondition, Criterion, Selector,
-        SingleCheckCondition, TestCaseCheck, TestCaseCheckCondition, Transformation,
+        CaseCheckSeverity, Check, Criterion, Selector, SingleCaseCheckCondition, TestCaseCheck,
+        Transformation,
     };
+    pub use crate::conditions::{CompoundCheckCondition, Condition};
     pub use crate::parts::{StaticTestCategory, TestCase, TestCategory, TestSpecification};
 }
 
-use std::num::NonZeroUsize;
-
 use derive_getters::Getters;
-use derive_more::From;
-use schemars::{JsonSchema, transform};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 

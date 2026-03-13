@@ -1,6 +1,6 @@
-use crate::spec::TestCaseCheckCondition;
+use crate::spec::Condition;
 
-use super::{Criterion, Selector, SingleCheckCondition, Transformation};
+use super::{Criterion, Selector, SingleCaseCheckCondition, Transformation};
 
 pub struct Check {
     select: Selector,
@@ -28,15 +28,15 @@ impl Check {
         self.transformations.push(t.into());
         self
     }
-    pub fn criterion(self, criterion: Criterion) -> TestCaseCheckCondition {
-        SingleCheckCondition {
+    pub fn criterion(self, criterion: Criterion) -> Condition<SingleCaseCheckCondition> {
+        SingleCaseCheckCondition {
             select: self.select,
             transformations: self.transformations,
             criterion,
         }
         .into()
     }
-    pub fn c_equal_texts(self, text: impl Into<String>) -> TestCaseCheckCondition {
+    pub fn c_equal_texts(self, text: impl Into<String>) -> Condition<SingleCaseCheckCondition> {
         self.criterion(Criterion::EqualTexts { other: text.into() })
     }
 }

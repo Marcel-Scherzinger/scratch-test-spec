@@ -1,10 +1,8 @@
 use serde_json::Map;
 
-use crate::report::{CategoryReport, CheckReport};
 use crate::spec::{
-    CaseCheckSeverity, Check, CompoundCheckCondition, Criterion, Selector, SingleCheckCondition,
-    StaticTestCategory, TestCase, TestCaseCheck, TestCaseCheckCondition, TestCategory,
-    TestSpecification, Transformation,
+    Check, CompoundCheckCondition, Criterion, StaticTestCategory, TestCase, TestCaseCheck,
+    TestCategory, TestSpecification, Transformation,
 };
 use crate::{RandomsCfg, RandomsGenerate};
 

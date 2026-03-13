@@ -73,6 +73,7 @@ impl TestCase {
         {
             let mut slist = SList::new(el.len().max(1000) as i64);
             for i in el {
+                #[allow(unused)]
                 slist.append_item(i.clone());
             }
             state.lists_mut().insert(lis.clone(), slist);

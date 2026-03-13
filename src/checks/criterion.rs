@@ -1,10 +1,8 @@
-use std::num::NonZeroUsize;
-
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use sinterpreter::{Report, default_state::DefaultState};
-use svalue::{SNumber, SValue};
+use svalue::SValue;
 
 use crate::{Number, RandomsCfg};
 
@@ -90,8 +88,8 @@ impl<T> TrueOrErr<T> for bool {
 impl Criterion {
     pub(crate) fn is_satisfied(
         &self,
-        randoms: Option<&RandomsCfg>,
-        report: &Report<'_, DefaultState>,
+        _randoms: Option<&RandomsCfg>,
+        _report: &Report<'_, DefaultState>,
         value: &SValue,
     ) -> Result<(), CriterionError<'_>> {
         let stringified = value.to_string();

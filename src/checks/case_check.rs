@@ -4,14 +4,17 @@ use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use sinterpreter::{Report, default_state::DefaultState};
 
-use super::{CaseCheckSeverity, TestCaseCheckCondition};
+use super::CaseCheckSeverity;
 
-use crate::{CheckResultMessages, RandomsCfg, error::ConditionError};
+use crate::{
+    CheckResultMessages, RandomsCfg, error::ConditionError, spec::Condition,
+    spec::SingleCaseCheckCondition,
+};
 
 #[derive(Debug, PartialEq)]
 pub struct CheckReport<'s> {
     severity: CaseCheckSeverity,
-    failure: Option<ConditionError<'s>>,
+    failure: Option<ConditionError<'s, SingleCaseCheckCondition>>,
     message: Option<&'s CheckResultMessages>,
 }
 
@@ -22,7 +25,7 @@ pub struct TestCaseCheck {
     severity: CaseCheckSeverity,
     on_success: Option<CheckResultMessages>,
     on_failure: Option<CheckResultMessages>,
-    condition: TestCaseCheckCondition,
+    condition: Condition<SingleCaseCheckCondition>,
 }
 
 impl TestCaseCheck {
@@ -31,7 +34,7 @@ impl TestCaseCheck {
         randoms: Option<&RandomsCfg>,
         report: &Report<'_, DefaultState>,
     ) -> CheckReport<'a> {
-        let result = self.condition.is_satisfied(randoms, report);
+        let result = self.condition.check((randoms, report));
 
         let message = if result.is_ok() {
             self.on_success.as_ref()
@@ -45,17 +48,20 @@ impl TestCaseCheck {
         }
     }
 
-    pub fn new_error(condition: impl Into<TestCaseCheckCondition>) -> Self {
+    pub fn new_error(condition: impl Into<Condition<SingleCaseCheckCondition>>) -> Self {
         Self::new(CaseCheckSeverity::Error, condition)
     }
-    pub fn new_warning(condition: impl Into<TestCaseCheckCondition>) -> Self {
+    pub fn new_warning(condition: impl Into<Condition<SingleCaseCheckCondition>>) -> Self {
         Self::new(CaseCheckSeverity::Warning, condition)
     }
-    pub fn new_nice_to_have(condition: impl Into<TestCaseCheckCondition>) -> Self {
+    pub fn new_nice_to_have(condition: impl Into<Condition<SingleCaseCheckCondition>>) -> Self {
         Self::new(CaseCheckSeverity::NiceToHave, condition)
     }
 
-    pub fn new(severity: CaseCheckSeverity, condition: impl Into<TestCaseCheckCondition>) -> Self {
+    pub fn new(
+        severity: CaseCheckSeverity,
+        condition: impl Into<Condition<SingleCaseCheckCondition>>,
+    ) -> Self {
         Self {
             severity,
             on_success: None,
@@ -69,7 +75,7 @@ impl<'a> CheckReport<'a> {
     pub fn success(&self) -> bool {
         self.failure.is_none()
     }
-    pub fn failure(&self) -> Option<&ConditionError<'a>> {
+    pub fn failure(&self) -> Option<&ConditionError<'a, SingleCaseCheckCondition>> {
         self.failure.as_ref()
     }
     pub fn severity(&self) -> &CaseCheckSeverity {
@@ -84,5 +90,5 @@ crate::helper::impl_modifiers!(TestCaseCheck {
     severity: CaseCheckSeverity,
     on_success: Option<CheckResultMessages>,
     on_failure: Option<CheckResultMessages>,
-    condition: {into} TestCaseCheckCondition
+    condition: {into} Condition<SingleCaseCheckCondition>
 });

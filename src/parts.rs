@@ -1,4 +1,3 @@
-use derive_getters::Getters;
 use smodel::{
     ProjectDoc,
     blocks::{BlockKindUnit, EventBlockKindUnit},
