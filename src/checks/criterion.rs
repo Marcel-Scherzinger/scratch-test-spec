@@ -11,23 +11,26 @@ use crate::{Number, RandomsCfg};
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case", tag = "type")]
 pub enum Criterion {
+    #[schema(title = "equal-texts")]
     EqualTexts {
+        /// the text to compare the transformed selection to
         other: String,
     },
     #[serde(rename_all = "kebab-case")]
+    #[schema(title = "equal-numbers")]
     EqualNumbers {
+        /// the number to compare the transformed selection to
         other: Number,
+        /// if present and a number this defines a delta in which two numbers are still considered
+        /// equal
         float_tolerance: Option<f64>,
     },
-    ContainedIn {
-        text: String,
-    },
-    Contains {
-        text: String,
-    },
-    OneOf {
-        options: Vec<String>,
-    },
+    #[schema(title = "contained-in")]
+    ContainedIn { text: String },
+    #[schema(title = "contains")]
+    Contains { text: String },
+    #[schema(title = "one-of")]
+    OneOf { options: Vec<String> },
 }
 
 #[derive(Debug, PartialEq)]
