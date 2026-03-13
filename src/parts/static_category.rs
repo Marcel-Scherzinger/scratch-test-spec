@@ -10,6 +10,8 @@ use smodel::ProjectDoc;
 
 #[derive(Debug, PartialEq, derive_getters::Getters)]
 pub struct StaticCategoryReport<'s> {
+    description: Option<&'s String>,
+    randoms: Option<&'s RandomsCfg>,
     cases: Vec<TestCaseReport<'s>>,
 }
 
@@ -25,6 +27,8 @@ impl StaticTestCategory {
                 .iter()
                 .map(|case| case.run_on(self.randoms.as_ref(), doc, initial_block))
                 .collect(),
+            description: self.description.as_ref(),
+            randoms: self.randoms.as_ref(),
         }
     }
 }

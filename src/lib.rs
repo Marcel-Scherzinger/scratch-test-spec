@@ -1,9 +1,12 @@
 mod checks;
 mod conditions;
 mod helper;
+mod lints;
 mod parts;
 
 pub(crate) use helper::impl_modifiers;
+
+pub use conditions::ExplainableFailure;
 
 pub mod error {
     pub use crate::checks::{criterion::CriterionError, transformation::TransformationError};
@@ -12,6 +15,7 @@ pub mod error {
 }
 pub mod report {
     pub use crate::checks::case_check::CheckReport;
+    pub use crate::lints::LintReport;
     pub use crate::parts::category::CategoryReport;
 }
 pub mod spec {
@@ -20,6 +24,7 @@ pub mod spec {
         Transformation,
     };
     pub use crate::conditions::{CompoundCheckCondition, Condition};
+    pub use crate::lints::{Lint, LintCondition};
     pub use crate::parts::{StaticTestCategory, TestCase, TestCategory, TestSpecification};
 }
 
@@ -36,12 +41,28 @@ pub enum Number {
 }
 
 #[skip_serializing_none]
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
+#[derive(Debug, Default, PartialEq, Serialize, Deserialize, JsonSchema, Getters)]
 #[serde(rename_all = "kebab-case")]
 pub struct CheckResultMessages {
     human_msg: Option<String>,
     tools_msg: Option<String>,
     help_url: Option<String>,
+}
+
+crate::impl_modifiers!(CheckResultMessages {
+    human_msg: {optinto} String,
+    tools_msg: {optinto} String,
+    help_url: {optinto} String,
+});
+
+impl CheckResultMessages {
+    pub fn new() -> Self {
+        Self {
+            human_msg: None,
+            tools_msg: None,
+            help_url: None,
+        }
+    }
 }
 
 #[skip_serializing_none]

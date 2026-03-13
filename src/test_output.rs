@@ -1,10 +1,11 @@
 use serde_json::Map;
+use smodel::blocks::StmtBlockKindUnit;
 
 use crate::spec::{
-    Check, CompoundCheckCondition, Criterion, StaticTestCategory, TestCase, TestCaseCheck,
+    Check, CompoundCheckCondition, Criterion, Lint, StaticTestCategory, TestCase, TestCaseCheck,
     TestCategory, TestSpecification, Transformation,
 };
-use crate::{RandomsCfg, RandomsGenerate};
+use crate::{CheckResultMessages, RandomsCfg, RandomsGenerate};
 
 #[test]
 fn test_ser() {
@@ -29,6 +30,17 @@ fn test_ser() {
             generate: RandomsGenerate::Allow { seed: Some(73) },
         })),
     )])
+    .and_lint(
+        Lint::block_count_limit(StmtBlockKindUnit::ControlRepeat, 0)
+            .make_error()
+            .with_on_failure(Some(
+                CheckResultMessages::new()
+                    .with_human_msg(Some(
+                        "You are not allowed to use the repeat loop for this exercise".to_string(),
+                    ))
+                    .with_tools_msg(Some("Submission uses repeat loop".to_string())),
+            )),
+    )
     .with_misc(Some(serde_json::Value::Object(Map::from_iter(
         vec![
             ("title", "XX – Title"),
@@ -37,9 +49,7 @@ fn test_ser() {
         .into_iter()
         .map(|(x, y)| (x.to_string(), y.to_string().into())),
     ))));
-    let _serialised = (
-        "{}",
-        serde_json::to_string_pretty(&schemars::schema_for!(TestSpecification).to_value()).unwrap(),
-    );
+    let _serialised =
+        serde_json::to_string_pretty(&schemars::schema_for!(TestSpecification).to_value()).unwrap();
     let _schema = serde_json::to_string_pretty(&spec).unwrap();
 }

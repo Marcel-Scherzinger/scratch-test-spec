@@ -8,7 +8,7 @@ use svalue::SValue;
 use crate::{
     RandomsCfg,
     checks::{Criterion, Selector, Transformation},
-    conditions::AnySingleCondition,
+    conditions::{AnySingleCondition, ExplainableFailure},
     error::{CriterionError, TransformationError},
 };
 
@@ -33,6 +33,34 @@ pub struct SingleCaseCheckCondition {
     pub(super) transformations: Vec<Transformation>,
     pub(super) criterion: Criterion,
 }
+
+impl<'s> ExplainableFailure for SingleConditionError<'s> {
+    fn explain(&self) -> String {
+        use SingleConditionError as S;
+        match self {
+            S::SelectorHasNoTarget(selector) => {
+                format!("the program output didn't contain a target for the selector: {selector:?}")
+            }
+            S::Transformation {
+                error,
+                input,
+                idx,
+                context,
+            } => {
+                format!(
+                    "the transformation at index {idx} ({:?}) failed on input {input:?} with {error:?}",
+                    context.transformations()[*idx]
+                )
+            }
+            S::Criterion {
+                criterion_err,
+                context: _,
+                program_value,
+            } => criterion_err.explain(program_value),
+        }
+    }
+}
+
 impl SingleCaseCheckCondition {
     pub fn new(
         select: Selector,

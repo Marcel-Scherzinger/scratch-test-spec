@@ -47,6 +47,7 @@ pub struct TestCaseReport<'s> {
     interpreter_limits: Limits,
     interpreter_error_code: Option<RunError<DefaultStateError>>,
     checks: Vec<CheckReport<'s>>,
+    case: &'s TestCase,
 }
 
 impl TestCase {
@@ -95,6 +96,7 @@ impl TestCase {
             interpreter_limits,
             interpreter_error_code,
             checks,
+            case: self,
         }
     }
 }

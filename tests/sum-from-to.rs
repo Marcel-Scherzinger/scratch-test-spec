@@ -5,7 +5,7 @@ use scratch_test_spec::spec::{
 use smodel::ProjectDoc;
 
 #[test]
-fn test_sum_from_to() {
+fn test_sum_from_to_only_checks() {
     let json = smodel::json_from_sb3_file("sb3/sum-from-to.sb3").unwrap();
     let doc = ProjectDoc::from_json(&json).unwrap();
 

@@ -24,7 +24,7 @@ default-features = false
 git = "https://github.com/Marcel-Scherzinger/scratch-test-model"
 package = "scratch-test-model"
 default-features = false
-features = ["sb3"]
+features = ["sb3", "serde", "schemars"]
 
 [dependencies.sinterpreter]
 git = "https://github.com/Marcel-Scherzinger/scratch-test-interpreter"

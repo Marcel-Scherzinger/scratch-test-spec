@@ -4,16 +4,18 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 
-use crate::checks::{SingleCaseCheckCondition, single_condition::SingleConditionError};
-
 pub trait AnySingleCondition {
-    type Error<'s>
+    type Error<'s>: ExplainableFailure
     where
         Self: 's;
     type Input<'i>: Copy;
     fn check<'s>(&'s self, input: Self::Input<'_>) -> Result<(), Self::Error<'s>>
     where
         Self: Sized;
+}
+
+pub trait ExplainableFailure {
+    fn explain(&self) -> String;
 }
 
 #[skip_serializing_none]
@@ -32,9 +34,8 @@ pub enum CompoundCheckCondition<Single> {
     Not(Box<Condition<Single>>),
 }
 
-impl ConditionError<'_, SingleCaseCheckCondition> {
-    pub fn explain(&self) -> String {
-        use SingleConditionError as S;
+impl<S: AnySingleCondition + std::fmt::Debug> ExplainableFailure for ConditionError<'_, S> {
+    fn explain(&self) -> String {
         match self {
             Self::ArgumentOfNotSucceeded(inner) => {
                 format!("the condition passed to `Not` didn't fail as required: {inner:?}")
@@ -47,29 +48,7 @@ impl ConditionError<'_, SingleCaseCheckCondition> {
                 let total = total.iter().map(ConditionError::explain).collect_vec();
                 format!("none of the conditions passed to `Any` succeeded: {total:?}")
             }
-            Self::Single(single) => match single {
-                S::SelectorHasNoTarget(selector) => {
-                    format!(
-                        "the program output didn't contain a target for the selector: {selector:?}"
-                    )
-                }
-                S::Transformation {
-                    error,
-                    input,
-                    idx,
-                    context,
-                } => {
-                    format!(
-                        "the transformation at index {idx} ({:?}) failed on input {input:?} with {error:?}",
-                        context.transformations()[*idx]
-                    )
-                }
-                S::Criterion {
-                    criterion_err,
-                    context: _,
-                    program_value,
-                } => criterion_err.explain(program_value),
-            },
+            Self::Single(single) => single.explain(),
         }
     }
 }
