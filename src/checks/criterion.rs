@@ -5,7 +5,7 @@ use sinterpreter::{Report, default_state::DefaultState};
 use svalue::SValue;
 use utoipa::ToSchema;
 
-use crate::{Number, RandomsCfg};
+use crate::parts::{Number, RandomsCfg};
 
 #[skip_serializing_none]
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]

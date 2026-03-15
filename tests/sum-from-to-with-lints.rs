@@ -54,5 +54,4 @@ fn test_sum_from_to_with_lints_with_repeat() {
         "program uses more instances of control_repeat blocks than allowed (1 > 0)",
         lint.failure().unwrap().explain()
     );
-    panic!("{res:#?}");
 }

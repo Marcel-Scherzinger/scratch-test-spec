@@ -10,10 +10,8 @@ use smodel::ProjectDoc;
 use svalue::SList;
 use utoipa::ToSchema;
 
-use crate::{
-    RandomsCfg,
-    checks::{TestCaseCheck, case_check::CheckReport},
-};
+use crate::checks::{TestCaseCheck, case_check::CheckReport};
+use crate::parts::RandomsCfg;
 
 #[skip_serializing_none]
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]

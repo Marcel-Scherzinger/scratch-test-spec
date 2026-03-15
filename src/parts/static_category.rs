@@ -1,7 +1,5 @@
-use crate::{
-    RandomsCfg,
-    parts::test_case::{TestCase, TestCaseReport},
-};
+use crate::parts::RandomsCfg;
+use crate::parts::test_case::{TestCase, TestCaseReport};
 use derive_getters::Getters;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

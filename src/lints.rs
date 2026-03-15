@@ -5,8 +5,8 @@ use serde_with::skip_serializing_none;
 use smodel::{ProjectDoc, blocks::BlockKindUnit};
 use utoipa::ToSchema;
 
+use crate::parts::CheckResultMessages;
 use crate::{
-    CheckResultMessages,
     conditions::{AnySingleCondition, ExplainableFailure},
     error::ConditionError,
     spec::Condition,

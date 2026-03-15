@@ -1,11 +1,11 @@
 use serde_json::Map;
 use smodel::blocks::StmtBlockKindUnit;
 
+use crate::parts::{CheckResultMessages, RandomsCfg, RandomsGenerate};
 use crate::spec::{
     Check, CompoundCheckCondition, Criterion, Lint, StaticTestCategory, TestCase, TestCaseCheck,
     TestCategory, TestSpecification, Transformation,
 };
-use crate::{CheckResultMessages, RandomsCfg, RandomsGenerate};
 
 #[test]
 fn test_ser() {
@@ -26,9 +26,9 @@ fn test_ser() {
                     ])),
         )])
         .with_description(Some("Both positive"))
-        .with_randoms(Some(RandomsCfg {
-            generate: RandomsGenerate::Allow { seed: Some(73) },
-        })),
+        .with_randoms(Some(RandomsCfg::new(RandomsGenerate::Allow {
+            seed: Some(73),
+        }))),
     )])
     .and_lint(
         Lint::block_count_limit(StmtBlockKindUnit::ControlRepeat, 0)

@@ -6,8 +6,8 @@ use sinterpreter::{Report, default_state::DefaultState};
 use svalue::SValue;
 use utoipa::ToSchema;
 
+use crate::parts::RandomsCfg;
 use crate::{
-    RandomsCfg,
     checks::{Criterion, Selector, Transformation},
     conditions::{AnySingleCondition, ExplainableFailure},
     error::{CriterionError, TransformationError},

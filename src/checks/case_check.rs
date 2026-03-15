@@ -7,10 +7,8 @@ use utoipa::ToSchema;
 
 use super::CaseCheckSeverity;
 
-use crate::{
-    CheckResultMessages, RandomsCfg, error::ConditionError, spec::Condition,
-    spec::SingleCaseCheckCondition,
-};
+use crate::parts::{CheckResultMessages, RandomsCfg};
+use crate::{error::ConditionError, spec::Condition, spec::SingleCaseCheckCondition};
 
 #[derive(Debug, PartialEq)]
 pub struct CheckReport<'s> {
