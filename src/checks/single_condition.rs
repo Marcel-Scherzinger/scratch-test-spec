@@ -7,6 +7,7 @@ use svalue::SValue;
 use utoipa::ToSchema;
 
 use crate::parts::RandomsCfg;
+use crate::spec::{CaseCheckSeverity, CompoundCondition, TestCaseCheck};
 use crate::{
     checks::{Criterion, Selector, Transformation},
     conditions::{AnySingleCondition, ExplainableFailure},
@@ -131,4 +132,28 @@ pub enum SingleConditionError<'s> {
         /// the selected value after transformations that was seen by the criterion
         program_value: SValue,
     },
+}
+
+impl CompoundCondition<SingleCaseCheckCondition> {
+    pub fn with_severity(self, severity: CaseCheckSeverity) -> TestCaseCheck {
+        TestCaseCheck::new(severity, self)
+    }
+    pub fn make_error(self) -> TestCaseCheck {
+        self.with_severity(CaseCheckSeverity::Error)
+    }
+    pub fn make_warning(self) -> TestCaseCheck {
+        self.with_severity(CaseCheckSeverity::Warning)
+    }
+}
+
+impl SingleCaseCheckCondition {
+    pub fn with_severity(self, severity: CaseCheckSeverity) -> TestCaseCheck {
+        TestCaseCheck::new(severity, self)
+    }
+    pub fn make_error(self) -> TestCaseCheck {
+        self.with_severity(CaseCheckSeverity::Error)
+    }
+    pub fn make_warning(self) -> TestCaseCheck {
+        self.with_severity(CaseCheckSeverity::Warning)
+    }
 }

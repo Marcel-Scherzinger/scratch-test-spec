@@ -24,12 +24,12 @@ pub trait ExplainableFailure {
 #[serde(rename_all = "kebab-case", untagged)]
 pub enum Condition<Single> {
     Single(Single),
-    Compound(CompoundCheckCondition<Single>),
+    Compound(CompoundCondition<Single>),
 }
 #[skip_serializing_none]
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, ToSchema)]
 #[serde(rename_all = "kebab-case")]
-pub enum CompoundCheckCondition<Single> {
+pub enum CompoundCondition<Single> {
     #[schema(no_recursion, title = "all")]
     All(Vec<Condition<Single>>),
     #[schema(no_recursion, title = "any")]
@@ -71,7 +71,7 @@ pub enum ConditionError<'s, Single: AnySingleCondition> {
 
 impl<S: AnySingleCondition> Condition<S> {
     pub(crate) fn check<'s>(&'s self, input: S::Input<'_>) -> Result<(), ConditionError<'s, S>> {
-        use crate::spec::CompoundCheckCondition as C;
+        use crate::spec::CompoundCondition as C;
         use Condition as T;
 
         match self {

@@ -5,7 +5,7 @@ use serde_with::skip_serializing_none;
 use smodel::{ProjectDoc, blocks::BlockKindUnit};
 use utoipa::ToSchema;
 
-use crate::parts::CheckResultMessages;
+use crate::parts::ResultMessages;
 use crate::{
     conditions::{AnySingleCondition, ExplainableFailure},
     error::ConditionError,
@@ -18,8 +18,8 @@ use crate::{
 pub struct Lint {
     severity: LintSeverity,
     condition: Condition<LintCondition>,
-    on_success: Option<CheckResultMessages>,
-    on_failure: Option<CheckResultMessages>,
+    on_success: Option<ResultMessages>,
+    on_failure: Option<ResultMessages>,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone, Copy, ToSchema)]
@@ -37,7 +37,7 @@ pub enum LintSeverity {
 pub struct LintReport<'s> {
     severity: LintSeverity,
     failure: Option<ConditionError<'s, LintCondition>>,
-    message: Option<&'s CheckResultMessages>,
+    message: Option<&'s ResultMessages>,
 }
 impl<'s> LintReport<'s> {
     pub fn severity(&self) -> &LintSeverity {
@@ -46,14 +46,14 @@ impl<'s> LintReport<'s> {
     pub fn failure(&self) -> Option<&ConditionError<'s, LintCondition>> {
         self.failure.as_ref()
     }
-    pub fn message(&self) -> Option<&CheckResultMessages> {
+    pub fn message(&self) -> Option<&ResultMessages> {
         self.message
     }
 }
 
 crate::impl_modifiers!(Lint {
-    on_failure: Option<CheckResultMessages>,
-    on_success: Option<CheckResultMessages>,
+    on_failure: Option<ResultMessages>,
+    on_success: Option<ResultMessages>,
     severity: LintSeverity,
 });
 

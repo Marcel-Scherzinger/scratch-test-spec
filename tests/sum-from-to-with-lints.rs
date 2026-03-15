@@ -1,18 +1,19 @@
 use scratch_test_spec::ExplainableFailure;
 use scratch_test_spec::report::CategoryReport;
 use scratch_test_spec::spec::{
-    Check, Lint, StaticTestCategory, TestCase, TestCaseCheck, TestSpecification, Transformation,
+    Check, Lint, StaticTestCategory, TestCase, TestSpecification, Transformation,
 };
 use smodel::ProjectDoc;
 use smodel::blocks::StmtBlockKindUnit;
 
 fn specification() -> TestSpecification {
     TestSpecification::new(vec![StaticTestCategory::new(vec![
-        TestCase::new(vec!["1", "10"]).and_check(TestCaseCheck::new_error(
+        TestCase::new(vec!["1", "10"]).and_check(
             Check::last_line()
                 .transform(Transformation::ExtractSingleNumber {})
-                .c_equal_texts("45"),
-        )),
+                .c_equal_texts("45")
+                .make_error(),
+        ),
     ])])
     .and_lint(Lint::block_count_limit(StmtBlockKindUnit::ControlRepeat, 0).make_error())
 }

@@ -1,4 +1,5 @@
 use derive_getters::Getters;
+use derive_more::From;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
@@ -35,7 +36,7 @@ fn find_initial_block(doc: &ProjectDoc) -> Result<&smodel::Id, SpecError> {
     }
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone, ToSchema)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, JsonSchema, Clone, ToSchema, From)]
 #[serde(rename_all = "kebab-case", untagged)]
 pub enum Number {
     Int(i64),
@@ -45,19 +46,19 @@ pub enum Number {
 #[skip_serializing_none]
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize, JsonSchema, Getters, ToSchema)]
 #[serde(rename_all = "kebab-case")]
-pub struct CheckResultMessages {
+pub struct ResultMessages {
     human_msg: Option<String>,
     tools_msg: Option<String>,
     help_url: Option<String>,
 }
 
-crate::impl_modifiers!(CheckResultMessages {
+crate::impl_modifiers!(ResultMessages {
     human_msg: {optinto} String,
     tools_msg: {optinto} String,
     help_url: {optinto} String,
 });
 
-impl CheckResultMessages {
+impl ResultMessages {
     pub fn new() -> Self {
         Self {
             human_msg: None,

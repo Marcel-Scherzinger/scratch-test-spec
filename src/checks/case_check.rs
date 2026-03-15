@@ -7,14 +7,14 @@ use utoipa::ToSchema;
 
 use super::CaseCheckSeverity;
 
-use crate::parts::{CheckResultMessages, RandomsCfg};
+use crate::parts::{RandomsCfg, ResultMessages};
 use crate::{error::ConditionError, spec::Condition, spec::SingleCaseCheckCondition};
 
 #[derive(Debug, PartialEq)]
 pub struct CheckReport<'s> {
     severity: CaseCheckSeverity,
     failure: Option<ConditionError<'s, SingleCaseCheckCondition>>,
-    message: Option<&'s CheckResultMessages>,
+    message: Option<&'s ResultMessages>,
 }
 
 #[skip_serializing_none]
@@ -22,8 +22,8 @@ pub struct CheckReport<'s> {
 #[serde(rename_all = "kebab-case")]
 pub struct TestCaseCheck {
     severity: CaseCheckSeverity,
-    on_success: Option<CheckResultMessages>,
-    on_failure: Option<CheckResultMessages>,
+    on_success: Option<ResultMessages>,
+    on_failure: Option<ResultMessages>,
     condition: Condition<SingleCaseCheckCondition>,
 }
 
@@ -80,14 +80,14 @@ impl<'a> CheckReport<'a> {
     pub fn severity(&self) -> &CaseCheckSeverity {
         &self.severity
     }
-    pub fn message(&self) -> Option<&'a CheckResultMessages> {
+    pub fn message(&self) -> Option<&'a ResultMessages> {
         self.message
     }
 }
 
 crate::helper::impl_modifiers!(TestCaseCheck {
     severity: CaseCheckSeverity,
-    on_success: Option<CheckResultMessages>,
-    on_failure: Option<CheckResultMessages>,
+    on_success: Option<ResultMessages>,
+    on_failure: Option<ResultMessages>,
     condition: {into} Condition<SingleCaseCheckCondition>
 });

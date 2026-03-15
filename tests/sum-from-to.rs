@@ -1,6 +1,6 @@
 use scratch_test_spec::report::CategoryReport;
 use scratch_test_spec::spec::{
-    Check, StaticTestCategory, TestCase, TestCaseCheck, TestSpecification, Transformation,
+    Check, StaticTestCategory, TestCase, TestSpecification, Transformation,
 };
 use smodel::ProjectDoc;
 
@@ -10,9 +10,8 @@ fn test_sum_from_to_only_checks() {
     let doc = ProjectDoc::from_json(&json).unwrap();
 
     let spec1 = TestSpecification::new(vec![StaticTestCategory::new(vec![
-        TestCase::new(vec!["1", "10"]).and_check(TestCaseCheck::new_error(
-            Check::last_line().c_equal_texts("45"),
-        )),
+        TestCase::new(vec!["1", "10"])
+            .and_check(Check::last_line().c_equal_texts("45").make_error()),
     ])]);
 
     let res1 = spec1.run_on(&doc).unwrap();
@@ -22,11 +21,12 @@ fn test_sum_from_to_only_checks() {
     assert!(!check_report.success());
 
     let spec2 = TestSpecification::new(vec![StaticTestCategory::new(vec![
-        TestCase::new(vec!["1", "10"]).and_check(TestCaseCheck::new_error(
+        TestCase::new(vec!["1", "10"]).and_check(
             Check::last_line()
                 .transform(Transformation::ExtractSingleNumber {})
-                .c_equal_texts("45"),
-        )),
+                .c_equal_texts("45")
+                .make_error(),
+        ),
     ])]);
 
     let res2 = spec2.run_on(&doc).unwrap();
